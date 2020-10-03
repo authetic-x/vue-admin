@@ -1,18 +1,26 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Get article</h1>
+    <p>{{article.title}}</p>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import axios from '@/utils/request'
 
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      article: '',
+    }
+  },
+  mounted() {
+    axios.get('/vue-element-admin/article/list')
+    .then(res => {
+      console.log(res)
+      this.article = res.data
+    })
   }
 }
 </script>

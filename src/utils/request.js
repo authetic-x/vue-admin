@@ -1,8 +1,10 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 
+console.log(process.env.VUE_APP_BASE_API)
+
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL,
+  baseURL: process.env.VUE_APP_BASE_API,
   timeout: 5000
 })
 
@@ -15,6 +17,7 @@ instance.interceptors.request.use(config => {
 })
 
 instance.interceptors.response.use(response => {
+  // api嵌套了一层data
   const res = response.data
   
   // error handler

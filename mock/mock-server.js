@@ -6,13 +6,13 @@ const Mock = require('mockjs')
 
 const mockDir = path.join(process.cwd(), 'mock')
 
-function processMock(url, type, respond) {
+function processMock(url, type, response) {
   return {
-    url: new RegExp(`${process.env.VUE_APP_BASE_URL}${url}`),
+    url: new RegExp(`${process.env.VUE_APP_BASE_API}${url}`),
     type: type || 'get',
     response(req, res) {
       console.log('Request invoked: ', req.path)
-      res.json(Mock.mock(respond instanceof Function ? respond(req, res) : respond))
+      res.json(Mock.mock(response instanceof Function ? response(req, res) : response))
     }
   }
 }
@@ -22,10 +22,11 @@ function registerRoutes(app) {
   const { mocks } = require('./index')
 
   const mockForServer = mocks.map(mock => {
-    return processMock(mock.url, mock.type, mock.respond)
+    return processMock(mock.url, mock.type, mock.response)
   })
   for(const mock of mockForServer) {
-    app[mock.url](mock.url, mock.response)
+    // console.log(mock.url, mock.response)
+    app[mock.type](mock.url, mock.response)
     mockLastIndex = app._router.stack.length
   }
   const mockRoutesLength = mockForServer.length
@@ -56,6 +57,7 @@ module.exports = app => {
   let mockStartIndex = mockRoutes.mockStartIndex
   let mockRoutesLength = mockRoutes.mockRoutesLength
 
+  // hot module replacement
   chokidar.watch('all', (event, path) => {
     if (event === 'change' || event === 'add') {
       try {

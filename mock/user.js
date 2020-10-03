@@ -12,7 +12,7 @@ module.exports = [
   {
     url: '/vue-template-admin/user/login',
     type: 'post',
-    respond: req => {
+    response: req => {
       const { username } = req.body
       const token = tokens[username]
 
