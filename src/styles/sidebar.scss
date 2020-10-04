@@ -1,9 +1,20 @@
 #app {
   .main-container {
-    
+    position: relative;
+    min-height: 100%;
+    margin-left: $sideBarWidth;
+    transition: margin-left .28s;
   }
 
   .sidebar-container {
-    
+    overflow: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: $sideBarWidth;
+    height: 100%;
+    z-index: 1001;
+    transition: width .28s;
   }
 }

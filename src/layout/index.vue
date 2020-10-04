@@ -12,6 +12,7 @@
 <script>
 import { Sidebar } from './components'
 import { mapState } from 'vuex'
+import ResizeMixin from './mixin'
 
 export default {
   name: 'Layout',
@@ -30,6 +31,12 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile',
       }
+    }
+  },
+  mixins: [ResizeMixin],
+  methods: {
+    handleClickOutside() {
+      
     }
   }
 }

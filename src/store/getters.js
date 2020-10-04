@@ -1,3 +1,5 @@
 export default {
-  sidebar: state => state.app.sidebar
+  sidebar: state => state.app.sidebar,
+  size: state => state.app.size,
+  
 }
