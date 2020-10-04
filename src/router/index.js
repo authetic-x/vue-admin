@@ -5,7 +5,7 @@ import Layout from '@/layout'
 
 Vue.use(VueRouter)
 
-const routes = [
+export const constantRoutes = [
   {
     path: '/',
     redirect: '/dashboard',
@@ -21,10 +21,15 @@ const routes = [
   },
 ]
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
-})
+function createRouter() {
+  return new VueRouter({
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes: constantRoutes,
+    scrollBehavior: () => ({ y: 0 })
+  })
+}
+
+const router = createRouter()
 
 export default router

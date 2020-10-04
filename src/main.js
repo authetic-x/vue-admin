@@ -3,13 +3,18 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import 'normalize.css/normalize.css'
+import Cookies from 'js-cookie'
+
 import Element from 'element-ui'
 import enLang from 'element-ui/lib/locale/lang/en'
+
+import '@/styles/index.scss' // global css
 
 Vue.config.productionTip = false
 
 Vue.use(Element, {
-  size: 'medium', // TODO: import cookie
+  size: Cookies.get('size') || 'medium',
   locale: enLang
 })
 
