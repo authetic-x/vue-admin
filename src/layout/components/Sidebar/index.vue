@@ -1,10 +1,25 @@
 <template>
-  <div>Sidebar</div>
+  <div :class="{'hasLogo': showLogo}">
+    <el-scrollbar>
+      <el-menu
+        :default-active="activeMenu"
+        :collapse="isCollapse"
+        :background-color="variables.menuBg"
+        :text-color="variables.menuText"
+        :active-text-color="variables.menuActiveText"
+        :unique-opened="false"
+        :collapse-transition="false"
+        mode="vertical"
+      >
+        
+      </el-menu>
+    </el-scrollbar>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import varibles from '@/styles/variables.scss'
+import variables from '@/styles/variables.scss'
 
 export default {
   name: 'Sidebar',
