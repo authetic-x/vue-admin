@@ -2,7 +2,7 @@
 
 module.exports = [
   {
-    url: '/vue-element-admin/article/list',
+    url: '/vue-admin/article/list',
     type: 'get',
     response: req => {
       return {

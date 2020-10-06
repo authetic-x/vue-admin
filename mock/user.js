@@ -7,10 +7,25 @@ const tokens = {
   }
 }
 
+const users = {
+  'admin-token': {
+    roles: ['admin'],
+    introduction: 'I am a super administrator',
+    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+    name: 'Super Admin'   
+  },
+  'editor-token': {
+    roles: ['editor'],
+    introduction: 'I am an editor',
+    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+    name: 'Normal Editor'
+  }
+}
+
 module.exports = [
   // login
   {
-    url: '/vue-template-admin/user/login',
+    url: '/vue-admin/user/login',
     type: 'post',
     response: req => {
       const { username } = req.body
@@ -28,5 +43,33 @@ module.exports = [
         data: token,
       }
     }
+  },
+  // getInfo
+  {
+    url: '/vue-admin/user/info\.*',
+    type: 'get',
+    response: req => {
+      const { token } = req.query
+      const info = users[token]
+      
+      if (!info) {
+        return {
+          code: 50008,
+          message: 'Login failed, unable to get user details.'
+        }
+      }
+      return {
+        code: 20000,
+        data: info
+      }
+    }
+  },
+  {
+    url: '/vue-admin/user/logout',
+    type: 'post',
+    response: _ => ({
+      code: 20000,
+      data: 'success'
+    })
   }
 ]

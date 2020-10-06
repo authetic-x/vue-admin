@@ -33,6 +33,12 @@ export const constantRoutes = [
   }
 ]
 
+export const asyncRoutes = [
+  {
+    
+  }
+]
+
 function createRouter() {
   return new VueRouter({
     mode: 'history',
@@ -40,6 +46,11 @@ function createRouter() {
     routes: constantRoutes,
     scrollBehavior: () => ({ y: 0 })
   })
+}
+
+function resetRouter() {
+  const newRouter = createRouter()
+  router.matcher = newRouter.matcher
 }
 
 const router = createRouter()
