@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
+import store from '@/store'
+import { getToken } from './auth'
 
 console.log(process.env.VUE_APP_BASE_API)
 
@@ -9,7 +11,9 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(config => {
-  // TODO: 添加token
+  if (store.getters.token) {
+    config.headers['X-Token'] = getToken()
+  }
   return config;
 }, error => {
   console.log(error);
@@ -36,7 +40,9 @@ instance.interceptors.response.use(response => {
         cancelButtonText: 'Cancel',
         type: 'waring',
       }).then(() => {
-        // TODO: redirect to login page
+        store.dispatch('user/resetToken').then(() => {
+          location.reload()
+        })
       })
     }
     return Promise.reject(new Error(res.message || 'Error'))
