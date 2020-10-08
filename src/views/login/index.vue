@@ -6,6 +6,10 @@
       </div>
 
       <el-form-item prop="username">
+        <span class="svg-container">
+          <svg-icon icon-class="user"/>
+        </span>
+
         <el-input
           ref="username"
           v-model="loginForm.username"
@@ -17,23 +21,41 @@
         />
       </el-form-item>
 
-      <el-form-item>
-        <el-input 
-          ref="password"
-          v-model="loginForm.password"
-          name="password"
-          placeholder="Password"
-          :type="passwordType"
-          :key="passwordType"
-          autocomplete="on"
-          tabindex="2"
-        />
-      </el-form-item>
+      <el-tooltip v-model="capsTooltip" content="Caps lock is on" placement="right" manual>
+        <el-form-item>
+          <el-input 
+            ref="password"
+            v-model="loginForm.password"
+            name="password"
+            placeholder="Password"
+            :type="passwordType"
+            :key="passwordType"
+            autocomplete="on"
+            tabindex="2"
+            @keyup.native="checkCapslock"
+            @blur="capsTooltip = false"
+            @keyup.enter.native="handleLogin"
+          />
+        </el-form-item>
+      </el-tooltip>
 
       <el-button :loading="loading" type="primary" 
         style="width: 100%;margin-bottom: 30px;" @click.native.prevent="handleLogin"
       >Login</el-button>
+
+      <div class="tips-container">
+        <div class="tips">
+          <span>Username: admin</span>
+          <span>password: any</span>
+        </div>
+
+        <el-button type="primary" @click="showDialog=true">Or connect with</el-button>
+      </div>
     </el-form>
+
+    <el-dialog title="Or connect with" :visible.sync="showDialog">
+      Can not be simulated on local, so please combine you own business simulation! ! !
+    </el-dialog>
   </div>
 </template>
 
@@ -87,7 +109,18 @@ export default {
       immediate: true
     }
   },
+  mounted() {
+    if (this.loginForm.username === '') {
+      this.$refs.username.focus()
+    } else {
+      this.$refs.password.focus()
+    }
+  },
   methods: {
+    checkCapslock(e) {
+      const { key } = e
+      this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
+    },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
         if (cur !== 'redirect') {
@@ -148,6 +181,19 @@ $light_gray:#eee;
       font-weight: bold;
       text-align: center;
       color: $light_gray;
+    }
+  }
+
+  .tips-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .tips {
+      span {
+        display: block;
+        color: $light_gray;
+        font-size: 14px;
+      }
     }
   }
 }

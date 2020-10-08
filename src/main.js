@@ -11,6 +11,7 @@ import enLang from 'element-ui/lib/locale/lang/en'
 
 import '@/styles/index.scss' // global css
 
+import './icons'
 import './permission'
 
 Vue.config.productionTip = false
