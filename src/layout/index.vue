@@ -12,7 +12,7 @@
 <script>
 import { Sidebar } from './components'
 import { mapState } from 'vuex'
-import ResizeMixin from './mixin'
+import ResizeMixin from './mixin/resizeHandler'
 
 export default {
   name: 'Layout',

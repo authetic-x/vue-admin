@@ -4,7 +4,7 @@ import getters from './getters'
 
 Vue.use(Vuex)
 
-const moduleFiles = require.context('./module', true, /\.js$/)
+const moduleFiles = require.context('./modules', true, /\.js$/)
 
 const modules = moduleFiles.keys().reduce((modules, modulePath) => {
   // ./app.js -> app

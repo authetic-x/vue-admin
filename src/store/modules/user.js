@@ -37,6 +37,7 @@ const actions = {
         const { data } = res
         commit('SET_TOKEN', data.token)
         setToken(data.token)
+        resolve()
       }).catch(error => {
         reject(error)
       })
@@ -92,6 +93,8 @@ const actions = {
 }
 
 export default {
-  namespace: true,
+  namespaced: true,
   state,
+  mutations,
+  actions,
 }

@@ -35,10 +35,13 @@ export default {
       return this.$store.state.settings.sidebarLogo
     },
     varibles() {
-      return varibles
+      return variables
     },
     isCollapse() {
       return !this.sidebar.opened
+    },
+    variables() {
+      return variables
     }
   }
 }

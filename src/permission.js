@@ -6,7 +6,12 @@ import 'nprogress/nprogress.css'
 import { getPageTitle } from '@/utils/get-page-title'
 import { getToken } from './utils/auth'
 
+// ??
+NProgress.configure({ showSpinner: false })
+
 const whiteList = ['/login', '/auth-redirect']
+
+// TODO: 登录页跳转到首页时会报一个bug
 
 router.beforeEach(async (to, from, next) => {
   NProgress.start()
@@ -43,6 +48,7 @@ router.beforeEach(async (to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
+      // console.log(to.path)
       next(`/login?redirect=${to.path}`)
       NProgress.done()
     }
