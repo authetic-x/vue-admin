@@ -23,6 +23,10 @@
 
       <el-tooltip v-model="capsTooltip" content="Caps lock is on" placement="right" manual>
         <el-form-item>
+          <span class="svg-container">
+            <svg-icon icon-class="password"/>
+          </span>
+
           <el-input 
             ref="password"
             v-model="loginForm.password"
@@ -36,6 +40,10 @@
             @blur="capsTooltip = false"
             @keyup.enter.native="handleLogin"
           />
+
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
+          </span>
         </el-form-item>
       </el-tooltip>
 
@@ -55,15 +63,20 @@
 
     <el-dialog title="Or connect with" :visible.sync="showDialog">
       Can not be simulated on local, so please combine you own business simulation! ! !
+      <ThirdPartSignIn />
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { validUsername } from '@/utils/validate'
+import ThirdPartSignIn from '@/views/login/components/ThirdPartSignIn'
 
 export default {
   name: 'Login',
+  components: {
+    ThirdPartSignIn,
+  },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
@@ -121,6 +134,13 @@ export default {
       const { key } = e
       this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
     },
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = 'text'
+      } else {
+        this.passwordType = 'password'
+      }
+    },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
         if (cur !== 'redirect') {
@@ -154,6 +174,41 @@ export default {
 }
 </script>
 
+<style lang="scss">
+$bg:#283443;
+$light_gray:#fff;
+$cursor: #fff;
+
+.login-container {
+  .el-form-item {
+    border: 1px solid rgba(255, 255, 255, .1);
+    background: rgba(0, 0, 0, .1);
+    border-radius: 5px;
+    color: #454545;
+    input {
+      height: 47px;
+      border: 0;
+      border-radius: 0;
+      padding: 12px 5px 12px 15px;
+      background: transparent;
+      color: $light_gray;
+      caret-color: $cursor;
+
+      &:-webkit-autofill {
+        box-shadow: 0 0 0px 1000px $bg inset !important;
+        -webkit-text-fill-color: $cursor !important;
+      }
+    }
+  }
+
+  .el-input {
+    display: inline-block;
+    height: 47px;
+    width: 85%;
+  }
+}
+</style>
+
 <style lang="scss" scoped>
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
@@ -172,6 +227,22 @@ $light_gray:#eee;
     max-width: 100%;
     margin: 0 auto;
     padding: 160px 35px 0;
+  }
+
+  .svg-container {
+    display: inline-block;
+    width: 30px;
+    padding: 6px 5px 6px 15px;
+    color: $dark_gray;
+  }
+
+  .show-pwd {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    font-size: 16px;
+    cursor: pointer;
+    color: $dark_gray;
   }
 
   .title-container {
