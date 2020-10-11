@@ -16,5 +16,48 @@
     height: 100%;
     z-index: 1001;
     transition: width .28s;
+
+    .scrollbar-wrapper {
+      overflow-x: hidden !important;
+    }
+
+    .el-scrollbar__bar.is-vertical {
+      right: 0px;
+    }
+
+    .el-scrollbar {
+      height: 100%;
+    }
+
+    .is-horizontal {
+      display: none;
+    }
+
+    a {
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .svg-icon {
+      margin-right: 16px;
+    }
+
+    .sub-el-icon {
+      margin-right: 12px;
+      margin-left: 2px;
+    }
+
+    .el-menu {
+      width: 100% !important;
+      height: 100%;
+      border: none;
+    }
+  }
+  // TODO: collapse sidebar
+  .hideSidebar {
+    .sidebar-container {
+      width: 54px !important;
+    }
   }
 }

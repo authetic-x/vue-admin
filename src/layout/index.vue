@@ -3,13 +3,16 @@
     <div v-if="device==='mobile' && sidebar.opened" class="drawer-bg"  @click="handleClickOutside"></div>
     <sidebar class="sidebar-container"/>
     <div class="main-container">
+      <div :class="{'fixed-header': fixedHeader}">
+        <Navbar />
+      </div>
       <AppMain />
     </div>
   </div>
 </template>
 
 <script>
-import { Sidebar, AppMain } from './components'
+import { Sidebar, AppMain, Navbar } from './components'
 import { mapState } from 'vuex'
 import ResizeMixin from './mixin/resizeHandler'
 
@@ -17,12 +20,16 @@ export default {
   name: 'Layout',
   components: {
     Sidebar,
-    AppMain
+    AppMain,
+    Navbar
   },
   computed: {
     ...mapState({
       sidebar: state => state.app.sidebar,
-      device: state => state.app.device
+      device: state => state.app.device,
+      showSettings: state => state.settings.showSettings,
+      needTagsView: state => state.settings.tagsView,
+      fixedHeader: state => state.settings.fixedHeader
     }),
     classObj() {
       return {
