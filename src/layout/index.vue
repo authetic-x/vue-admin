@@ -43,7 +43,7 @@ export default {
   mixins: [ResizeMixin],
   methods: {
     handleClickOutside() {
-      
+      this.$store.dispatch('app/closeSidebar', { withoutAnimation: false })
     }
   }
 }

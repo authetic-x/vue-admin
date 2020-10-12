@@ -10,7 +10,8 @@ export default {
       }
     }
   },
-  beforeMounted() {
+  beforeMount() {
+    console.log('add resize handler')
     window.addEventListener('resize', this.$_resizeHandler)
   },
   beforeDestroy() {
@@ -29,6 +30,7 @@ export default {
       return rect.width - 1 < WIDTH
     },
     $_resizeHandler() {
+      console.log('---resize---')
       if (!document.hidden) {
         const isMobile = this.$_isMobile()
         store.dispatch('app/toggleDevice', { device: isMobile ? 'mobile' : 'desktop' })
