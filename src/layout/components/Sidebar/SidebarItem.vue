@@ -18,7 +18,7 @@
         :key="child.path"
         class="nest-menu"
         :item="child"
-        :base-path="item.path"
+        :basePath="item.path"
       />
     </el-submenu>
   </div>
@@ -64,7 +64,7 @@ export default {
       })
       if (showingChildren.length === 1) return true
       if (showingChildren.length === 0) {
-        this.onlyOneChild = { ...parent, path: '',  noShowingChildren: true}
+        this.onlyOneChild = { ...parent,  noShowingChildren: true}
         return true
       }
       return false
