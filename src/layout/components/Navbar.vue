@@ -1,17 +1,21 @@
 <template>
   <div class="navbar">
     <Hamburger class="hamburger-container" :isActive="sidebar.opened" @toggleClick="toggleSidebar"/>
+
+    <Breadcrumb class="breadcrumb-container"/>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
+import Breadcrumb from '@/components/Breadcrumb'
 
 export default {
   name: 'Navbar',
   components: {
-    Hamburger
+    Hamburger,
+    Breadcrumb,
   },
   computed: {
     ...mapGetters([
@@ -36,6 +40,7 @@ export default {
   background: #fff;
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
   .hamburger-container {
+    float: left;
     width: 50px;
     height: 100%;
     line-height: 50px;
@@ -44,6 +49,9 @@ export default {
     &:hover {
       background: rgba(0, 0, 0, .025);
     }
+  }
+  .breadcrumb-container {
+    float: left;
   }
 }
 </style>
