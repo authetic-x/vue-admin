@@ -3,6 +3,12 @@
     <Hamburger class="hamburger-container" :isActive="sidebar.opened" @toggleClick="toggleSidebar"/>
 
     <Breadcrumb class="breadcrumb-container"/>
+
+    <div class="right-menu">
+      <template v-if="device !== 'mobile'">
+        <Search />
+      </template>
+    </div>
   </div>
 </template>
 
@@ -10,12 +16,14 @@
 import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import Breadcrumb from '@/components/Breadcrumb'
+import Search from '@/components/Search'
 
 export default {
   name: 'Navbar',
   components: {
     Hamburger,
     Breadcrumb,
+    Search,
   },
   computed: {
     ...mapGetters([
@@ -52,6 +60,11 @@ export default {
   }
   .breadcrumb-container {
     float: left;
+  }
+  .right-menu {
+    float: right;
+    height: 100%;
+    line-height: 50px;
   }
 }
 </style>
