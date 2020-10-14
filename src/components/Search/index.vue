@@ -135,6 +135,7 @@ export default {
   .search-icon {
     font-size: 18px;
     vertical-align: middle;
+    cursor: pointer;
   }
   .header-search-select {
     overflow: hidden;

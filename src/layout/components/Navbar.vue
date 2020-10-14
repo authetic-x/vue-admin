@@ -6,7 +6,8 @@
 
     <div class="right-menu">
       <template v-if="device !== 'mobile'">
-        <Search />
+        <Search class="right-menu-item"/>
+        <Screenfull class="right-menu-item hover-effect"/>
       </template>
     </div>
   </div>
@@ -17,6 +18,7 @@ import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import Breadcrumb from '@/components/Breadcrumb'
 import Search from '@/components/Search'
+import Screenfull from '@/components/Screenfull'
 
 export default {
   name: 'Navbar',
@@ -24,6 +26,7 @@ export default {
     Hamburger,
     Breadcrumb,
     Search,
+    Screenfull
   },
   computed: {
     ...mapGetters([
@@ -65,6 +68,20 @@ export default {
     float: right;
     height: 100%;
     line-height: 50px;
+    .right-menu-item {
+      display: inline-block;
+      height: 100%;
+      padding: 0 8px;
+      color: #5a5e66;
+      font-size: 18px;
+    }
+    .hover-effect {
+      cursor: pointer;
+      transition: background .3s;
+      &:hover {
+        background: rgba(0, 0, 0, .025)
+      }
+    }
   }
 }
 </style>
