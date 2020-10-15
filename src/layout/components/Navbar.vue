@@ -7,8 +7,36 @@
     <div class="right-menu">
       <template v-if="device !== 'mobile'">
         <Search class="right-menu-item"/>
+
         <Screenfull class="right-menu-item hover-effect"/>
+
+        <el-tooltip content="Layout Size" effect="dark" placement="bottom">
+          <SizeSelect class="right-menu-item hover-effect"/>
+        </el-tooltip>
       </template>
+
+      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+        <div class="avatar-wrapper">
+          <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
+          <i class="el-icon-caret-bottom" />
+        </div>
+
+        <el-dropdown-menu>
+          <router-link to="/profile/index">
+            <el-dropdown-item>Profile</el-dropdown-item>
+          </router-link>
+          <router-link to="/">
+            <el-dropdown-item>Dashboard</el-dropdown-item>
+          </router-link>
+          <a href="https://github.com/authetic-x" target="_blank">
+            <el-dropdown-item>Github</el-dropdown-item>
+          </a>
+          <a href="https://github.com/authetic-x" target="_blank">
+            <el-dropdown-item>Docs</el-dropdown-item>
+          </a>
+          <el-dropdown-item divided @click.native="logout">Log Out</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
   </div>
 </template>
@@ -19,6 +47,7 @@ import Hamburger from '@/components/Hamburger'
 import Breadcrumb from '@/components/Breadcrumb'
 import Search from '@/components/Search'
 import Screenfull from '@/components/Screenfull'
+import SizeSelect from '@/components/SizeSelect'
 
 export default {
   name: 'Navbar',
@@ -26,7 +55,8 @@ export default {
     Hamburger,
     Breadcrumb,
     Search,
-    Screenfull
+    Screenfull,
+    SizeSelect
   },
   computed: {
     ...mapGetters([
@@ -38,6 +68,10 @@ export default {
   methods: {
     toggleSidebar() {
       this.$store.dispatch('app/toggleSidebar')
+    },
+    async logout() {
+      await this.$store.dispatch('user/logout')
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
 }
@@ -74,12 +108,33 @@ export default {
       padding: 0 8px;
       color: #5a5e66;
       font-size: 18px;
+      vertical-align: text-bottom;
     }
     .hover-effect {
       cursor: pointer;
       transition: background .3s;
       &:hover {
         background: rgba(0, 0, 0, .025)
+      }
+    }
+    .avatar-container {
+      margin-right: 30px;
+      .avatar-wrapper {
+        position: relative;
+        margin-top: 5px;
+        .user-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          cursor: pointer;
+        }
+        .el-icon-caret-bottom {
+          position: absolute;
+          top: 25px;
+          right: -20px;
+          font-size: 12px;
+          cursor: pointer;
+        }
       }
     }
   }
