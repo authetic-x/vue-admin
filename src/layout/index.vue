@@ -5,6 +5,7 @@
     <div class="main-container">
       <div :class="{'fixed-header': fixedHeader}">
         <Navbar />
+        <TagsView />
       </div>
       <AppMain />
     </div>
@@ -12,7 +13,7 @@
 </template>
 
 <script>
-import { Sidebar, AppMain, Navbar } from './components'
+import { Sidebar, AppMain, Navbar, TagsView } from './components'
 import { mapState } from 'vuex'
 import ResizeMixin from './mixin/resizeHandler'
 
@@ -21,7 +22,8 @@ export default {
   components: {
     Sidebar,
     AppMain,
-    Navbar
+    Navbar,
+    TagsView
   },
   computed: {
     ...mapState({
