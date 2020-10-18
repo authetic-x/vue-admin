@@ -9,11 +9,15 @@
         :class="{'active': isActive(tag)}"
         tag="span"
         :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
+        @contextmenu.prevent.native="openMenu(tag, $event)"
       >
         {{ tag.title }}
         <span v-if="!isAffix(tag)" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"></span>
       </router-link>
     </ScrollPane>
+    <ul v-if="visible" class="contextMenu" :style="{left: left + 'px', top: top + 'px'}">
+      <li @click="refreshTag">Refresh</li>
+    </ul>
   </div>
 </template>
 
@@ -79,7 +83,6 @@ export default {
       const { name } = this.$route
       if (name) {
         this.$store.dispatch('tagsView/addView', this.$route)
-        console.log('tagsView--Route', this.$route)
       }
     },
     filterAffixTags(routes, basePath = '/') {
@@ -108,7 +111,8 @@ export default {
       this.$nextTick(() => {
         for(const tag of tags) {
           if (tag.to.path === this.$route.path) {
-            this.$refs.scrollPane.moveToTarget(tag)
+            // TODO: full of bugs
+            // this.$refs.scrollPane.moveToTarget(tag)
             if (tag.to.fullPath !== this.$route.fullPath) {
               this.$route.dispatch('tagsView/updateVisitedView', this.$route)
             }
@@ -118,10 +122,54 @@ export default {
       })
     },
     closeSelectedTag(tag) {
-      // TODO: close tag
+      this.$store.dispatch('tagsView/delView', tag).then(({ visitedView }) => {
+        if (this.isActive(tag)) {
+          this.toLastView(visitedView, tag)
+        }
+      })
+    },
+    toLastView(visitedViews, view) {
+      const lastView = visitedViews[visitedViews.length - 1]
+      if (lastView) {
+        this.$router.push(lastView.fullPath)
+      } else {
+        if (view.name === 'Dashboard') {
+          this.$router.replace({ path: '/redirect' + view.fullPath })
+        } else {
+          this.$router.push('/')
+        }
+      }
+    },
+    openMenu(tag, e) {
+      const minMenuWidth = 105
+      const offsetLeft = this.$el.getBoundingClientRect().x
+      const containerWidth = this.$el.offsetWidth
+      const maxLeft = containerWidth - minMenuWidth
+      const left = e.clientX - offsetLeft + 15
+      if (left > maxLeft) {
+        this.left = maxLeft
+      } else {
+        this.left = left
+      }
+
+      this.top = e.clientY
+      this.visible = true
+      this.selectedTag = tag
     },
     closeMenu() {
       this.visible = false
+    },
+    refreshTag() {
+      this.$store.dispatch('tagsView/delView', this.selectedTag).then(() => {
+        // 强制刷新
+        this.$router.replace({ path: '/redirect' + this.selectedTag.fullPath })
+      })
+    },
+    closeOtherTags() {
+      // TODO:
+    },
+    closeAllTags() {
+      // TODO:
     }
   }
 }
@@ -149,7 +197,7 @@ export default {
 }
 </style>
 
-<style lang="scss" >
+<style lang="scss" scoped>
 .tags-view-container {
   width: 100%;
   height: 34px;
@@ -157,9 +205,6 @@ export default {
   border-bottom: 1px solid #d8dce5;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
   .tags-view-wrapper {
-    // display: flex;
-    // align-items: center;
-    // height: 100%;
     .tags-view-item {
       position: relative;
       display: inline-block;
@@ -185,6 +230,27 @@ export default {
           border-radius: 50%;
           background: #fff;
         }
+      }
+    }
+  }
+  .contextMenu {
+    position: absolute;
+    margin: 0;
+    padding: 5px 0;
+    border-radius: 4px;
+    list-style-type: none;
+    z-index: 3000;
+    font-size: 12px;
+    font-weight: 400;
+    background: #fff;
+    color: #333;
+    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
+    li {
+      margin: 0;
+      padding: 7px 16px;
+      cursor: pointer;
+      &:hover {
+        background: #eee;
       }
     }
   }
