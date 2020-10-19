@@ -50,14 +50,17 @@
     }
 
     .sub-el-icon {
-      margin-right: 12px;
-      margin-left: 2px;
+      margin-right: 15px;
     }
 
     .el-menu {
       width: 100% !important;
       height: 100%;
       border: none;
+      .el-menu-item [class^=el-icon-] {
+        width: 16px !important;
+        font-size: 16px !important;
+      }
     }
     // menu hover
     .submenu-title-noDropdown

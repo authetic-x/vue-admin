@@ -17,6 +17,8 @@
     </ScrollPane>
     <ul v-if="visible" class="contextMenu" :style="{left: left + 'px', top: top + 'px'}">
       <li @click="refreshTag">Refresh</li>
+      <li @click="closeOtherTags">Close Other Tags</li>
+      <li @click="closeAllTags">Close All Tags</li>
     </ul>
   </div>
 </template>
@@ -166,10 +168,15 @@ export default {
       })
     },
     closeOtherTags() {
-      // TODO:
+      if (this.$route.path !== this.selectedTag.path) {
+        this.$router.push(this.selectedTag)
+      }
+      this.$store.dispatch('tagsView/delOtherViews')
     },
     closeAllTags() {
-      // TODO:
+      this.$store.dispatch('tagsView/delAllViews').then(() => {
+        this.$router.replace({ path: '/redirect' + '/' })
+      })
     }
   }
 }

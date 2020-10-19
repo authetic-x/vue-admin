@@ -60,6 +60,31 @@ export const constantRoutes = [
         meta: { title: 'Profile', icon: 'user', noCache: true }
       }
     ]
+  },
+  {
+    path: '/list',
+    component: Layout,
+    redirect: '/list/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/list/index'),
+        name: 'List',
+        meta: { title: 'List', icon: 'el-icon-notebook-2' }
+      }
+    ]
+  },
+  {
+    path: '/scroll',
+    component: Layout,
+    redirect: '/scroll/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/scroll/index'),
+        meta: { title: 'Scroll', icon: 'el-icon-toilet-paper' }
+      }
+    ]
   }
 ]
 
