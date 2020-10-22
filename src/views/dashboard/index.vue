@@ -2,7 +2,9 @@
   <div class="dashboard-container">
     <GithubCorner class="github-corner"/>
 
-    <el-row class="first-row" :gutter="8">
+    
+
+    <el-row class="list-row" :gutter="8">
       <el-col :xs="{ span: 24 }" :sm="{ span: 24 }" :md="{ span: 12 }" :lg="{ span: 12 }" :xl="{ span: 12 }">
         <InfiniteList />
       </el-col>
@@ -39,7 +41,7 @@ export default {
     top: 0;
     right: 0;
   }
-  .first-row {
+  .list-row {
     margin-top: 18px;
   }
 }

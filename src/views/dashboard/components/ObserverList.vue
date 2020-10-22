@@ -26,6 +26,12 @@ export default {
       firstListItem: null,
       lastListItem: null,
       maxListLen: LIST_LENGTH,
+      paddingTop: 0,
+      paddingBottom: 0,
+      topSentinelPreviousY: 0,
+      topSentinelPreviousRatio: 0,
+      bottomSentinelPreviousY: 0,
+      bottomSentinelPreviousRatio: 0,
     }
   },
   mounted() {
@@ -53,52 +59,90 @@ export default {
     lastIndex() {
       return String(this.currentIndex + 19)
     },
-    paddingTop() {
-      return this.currentIndex * 50
-    },
-    paddingBottom() {
-      return (this.maxListLen - (this.currentIndex + LIST_LENGTH)) * 50
-    }
   },
   methods: {
     observerCb(entries) {
       entries.forEach(entry => {
-        if (entry.target.id === this.lastIndex && entry.isIntersecting) {
-          this.bottomItemCb()
+        if (entry.target.id === this.lastIndex) {
+          this.bottomItemCb(entry)
         }
-        if (entry.target.id === this.firstIndex && entry.isIntersecting) {
-          this.topItemCb()
+        if (entry.target.id === this.firstIndex) {
+          this.topItemCb(entry)
         }
       })
     },
-    bottomItemCb() {
-      this.observer.unobserve(this.firstListItem)
-      this.observer.unobserve(this.lastListItem)
-      console.log('CurrentIndex: ' + this.currentIndex)
-      this.currentIndex += 10
-      this.maxListLen = Math.max(this.maxListLen, this.currentIndex + LIST_LENGTH)
-      this.$nextTick(() => {
-        this.updateObserveItem()
-      })
-    },
-    topItemCb() {
-      // TODO: 
-      if (this.currentIndex === 0) return
-      this.observer.unobserve(this.firstListItem)
-      this.observer.unobserve(this.lastListItem)
-      console.log('CurrentIndex: ' + this.currentIndex)
-      if (this.currentIndex > 0) {
-        this.currentIndex -= 10
+    bottomItemCb(entry) {
+      const currentY = entry.boundingClientRect.top;
+      const currentRatio = entry.intersectionRatio;
+      const isIntersecting = entry.isIntersecting;
+
+      if (isIntersecting && currentY < this.bottomSentinelPreviousY 
+      && currentRatio > this.bottomSentinelPreviousRatio) {
+        console.log('---bottom update---')
+        this.observer.unobserve(this.firstListItem)
+        this.observer.unobserve(this.lastListItem)
+        this.currentIndex += 10
+        console.log('CurrentIndex: ', this.currentIndex)
+        this.updatePadding(true)
+        this.$nextTick(() => {
+          this.updateObserveItem()
+        })
       }
-      this.$nextTick(() => {
-        this.updateObserveItem()
-      })
+      this.bottomSentinelPreviousY = currentY
+      this.bottomSentinelPreviousRatio = currentRatio
     },
+    topItemCb(entry) {
+      const currentY = entry.boundingClientRect.top;
+      const currentRatio = entry.intersectionRatio;
+      const isIntersecting = entry.isIntersecting;
+
+      if (isIntersecting && currentY > this.topSentinelPreviousY 
+      && currentRatio > this.topSentinelPreviousRatio) {
+        this.observer.unobserve(this.firstListItem)
+        this.observer.unobserve(this.lastListItem)
+        if (this.currentIndex > 0) {
+          this.currentIndex -= 10
+        }
+        console.log('top callback currentIndex: ', this.currentIndex)
+        this.updatePadding(false)
+        this.$nextTick(() => {
+          this.updateObserveItem()
+        })
+      }
+      this.topSentinelPreviousY = currentY
+      this.topSentinelPreviousRatio = currentRatio
+    },
+    // 不能简单的取第一个和最后一个，此时ref是乱序的
     updateObserveItem() {
-      this.firstListItem = this.$refs.list[0]
-      this.lastListItem = this.$refs.list[LIST_LENGTH - 1]
+      const [firstListItem, lastListItem] = this.getFirstAndLastItem()
+      // console.log(firstListItem, lastListItem)
+      this.firstListItem = firstListItem
+      this.lastListItem = lastListItem
       this.observer.observe(this.firstListItem)
       this.observer.observe(this.lastListItem)
+    },
+    updatePadding(scrollDown) {
+      if (scrollDown) {
+        this.paddingTop += 500
+        if (this.paddingBottom !== 0) {
+          this.paddingBottom -= 500
+        }
+      } else {
+        this.paddingBottom += 500
+        if (this.paddingTop !== 0) {
+          this.paddingTop -= 500
+        }
+      }
+    },
+    getFirstAndLastItem() {
+      const res = this.$refs.list.filter(vnode => {
+        if (vnode.id === this.firstIndex || vnode.id === this.lastIndex) {
+          return true
+        }
+        return false
+      })
+      if (+res[0].id > +res[1].id) [res[0], res[1]] = [res[1], res[0]]
+      return res
     }
   }
 }
